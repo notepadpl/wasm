@@ -1,10 +1,9 @@
-name: Build C to WebAssembly
+name: Compile C to WebAssembly
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
@@ -12,7 +11,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
     - name: Install Emscripten
       run: |
@@ -20,14 +19,15 @@ jobs:
         cd emsdk
         ./emsdk install latest
         ./emsdk activate latest
-        source ./emsdk_env.sh
-        echo "source $(pwd)/emsdk_env.sh" >> $GITHUB_ENV
+        source ./emsdk/emsdk_env.sh
 
-    - name: Compile hello.c to WebAssembly
+    - name: Compile C to WebAssembly
       run: |
-        source emsdk/emsdk_env.sh
+        source ./emsdk/emsdk_env.sh
         emcc hello.c -o hello.html
 
-    - name: Show output files
-      run: ls -lh hello.*
-      
+    - name: Upload WebAssembly files
+      uses: actions/upload-artifact@v2
+      with:
+        name: wasm-files
+        path: hello.*
