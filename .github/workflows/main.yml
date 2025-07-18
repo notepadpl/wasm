@@ -19,18 +19,17 @@ jobs:
           cd emsdk
           ./emsdk install latest
           ./emsdk activate latest
-          source ./emsdk_env.sh
         shell: bash
 
       - name: Compile C to WebAssembly
         run: |
           source emsdk/emsdk_env.sh
-          emcc hello.c -o hello.html
+          mkdir dist
+          emcc hello.c -o dist/index.html
         shell: bash
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .  # Publikujemy cały katalog, bo hello.html i reszta są tutaj
-          destination_dir: .
+          publish_dir: ./dist
