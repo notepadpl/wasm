@@ -16,14 +16,11 @@ jobs:
     - name: Install Emscripten
       run: |
         git clone https://github.com/emscripten-core/emsdk.git
-        cd emsdk
-        ./emsdk install latest
-        ./emsdk activate latest
-        source ./emsdk/emsdk_env.sh
+        
 
     - name: Compile C to WebAssembly
       run: |
-        source ./emsdk/emsdk_env.sh
+        
         emcc hello.c -o hello.html
 
     - name: Upload WebAssembly files
